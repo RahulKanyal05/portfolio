@@ -8,3 +8,33 @@ body {
   color: #e5e5e5;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* * {
+  cursor: none !important;
+}
+
+Ensure mobile users still have a normal experience
+@media (max-width: 1024px) {
+  * {
+    cursor: auto !important;
+  }
+  .custom-cursor {
+    display: none;
+  }
+} */

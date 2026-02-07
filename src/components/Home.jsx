@@ -1,155 +1,156 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
+import { useRef, useEffect } from "react";
 
-function Home() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
+const name = "Rahul Kanyal";
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+// Utility for Magnetic effect
+const MagneticButton = ({ children, className }) => {
+  const ref = useRef(null);
+  const x = useSpring(0, { stiffness: 150, damping: 15 });
+  const y = useSpring(0, { stiffness: 150, damping: 15 });
+
+  const handleMouse = (e) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    x.set(middleX * 0.4);
+    y.set(middleY * 0.4);
+  };
+
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <section
-      ref={containerRef}
-      id="home"
-      className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      style={{ x, y }}
+      className={className}
     >
-      {/* Animated grid background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-      </div>
+      {children}
+    </motion.div>
+  );
+};
 
-      <motion.div style={{ y, opacity }} className="max-w-5xl mx-auto z-10">
-        {/* Name with subtle glow */}
-        <div className="relative mb-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-7xl md:text-8xl font-black relative"
-          >
-            <span className="absolute inset-0 text-cyan-500/20 blur-xl">
-              Rahul Kanyal
-            </span>
-            <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="relative text-gray-200"
-            >
-              Rahul Kanyal
-            </motion.span>
-          </motion.h1>
-        </div>
+function Home() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-        {/* Professional subtitle with typing effect */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mb-12"
-        >
-          <motion.p 
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 1.2, delay: 0.7, ease: "easeInOut" }}
-            className="text-2xl md:text-3xl font-mono text-gray-400 overflow-hidden whitespace-nowrap"
-          >
-            <span className="text-cyan-400">&gt;</span> Crafting seamless user experiences
-          </motion.p>
-        </motion.div>
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
-        {/* Skill tags with stagger */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.1,
-                delayChildren: 1.2
-              }
-            }
-          }}
-          className="flex flex-wrap gap-3 justify-center mb-12"
-        >
-          {["React", "TypeScript", "Tailwind", "Framer Motion", "Next.js"].map((skill, i) => (
+  // Spotlight effect for the grid
+  const background = useTransform(
+    [mouseX, mouseY],
+    ([x, y]) => `radial-gradient(600px circle at ${x}px ${y}px, rgba(34, 211, 238, 0.15), transparent 80%)`
+  );
+
+  return (
+    <section className="relative min-h-[100dvh] flex items-center justify-center bg-[#0a0a0a] overflow-hidden px-4">
+      
+      {/* 1. DYNAMIC GRID SYSTEM */}
+      <motion.div 
+        style={{ background }}
+        className="absolute inset-0 z-0"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+
+      <div className="relative z-10 text-center">
+        
+        {/* 2. CHARACTER-LEVEL ANIMATION */}
+        <h1 className="text-[clamp(2.5rem,8vw,5rem)] font-bold tracking-tight text-white flex justify-center overflow-hidden">
+          {name.split("").map((char, i) => (
             <motion.span
-              key={skill}
-              variants={{
-                hidden: { opacity: 0, scale: 0 },
-                visible: { opacity: 1, scale: 1 }
+              key={i}
+              initial={{ y: 100, rotate: 25, opacity: 0 }}
+              animate={{ y: 0, rotate: 0, opacity: 1 }}
+              transition={{
+                duration: 0.8,
+                delay: i * 0.04,
+                ease: [0.215, 0.61, 0.355, 1],
               }}
-              whileHover={{ scale: 1.1, rotate: [-1, 1, -1, 0] }}
-              className="px-4 py-2 bg-gray-800/50 border border-cyan-500/30 rounded-full text-sm text-cyan-400 backdrop-blur-sm cursor-default"
+              className={`inline-block whitespace-pre ${char === " " ? "w-[0.3em]" : ""}`}
             >
-              {skill}
+              {char}
             </motion.span>
           ))}
-        </motion.div>
+        </h1>
 
-        {/* CTA buttons with better interactions */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="flex gap-4 justify-center flex-wrap"
+        {/* 3. FLOATING SUBTITLE */}
+        <motion.p
+          initial={{ opacity: 0, filter: "blur(10px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ delay: 1, duration: 1 }}
+          className="mt-4 text-gray-500 font-mono text-sm md:text-base uppercase tracking-[0.3em]"
         >
-          <motion.a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative px-8 py-4 overflow-hidden rounded-lg font-semibold"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 transition-transform group-hover:scale-105" />
-            <span className="relative text-black flex items-center gap-2">
-              Resume
-              <motion.span
-                initial={{ x: 0 }}
-                whileHover={{ x: 5 }}
+          Creative Engineer / <span className="text-cyan-500">System Architect</span>
+        </motion.p>
+
+        {/* 4. MAGNETIC ACTIONS */}
+        <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-8">
+          <MagneticButton className="relative group cursor-pointer">
+            <div className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="relative px-8 py-3 bg-white text-black font-bold rounded-full overflow-hidden block">
+              <motion.span className="relative z-10">Start Project</motion.span>
+            </span>
+          </MagneticButton>
+
+          <MagneticButton className="group cursor-pointer">
+            <span className="text-gray-400 group-hover:text-white transition-colors duration-300 flex items-center gap-2 font-medium">
+              Check Archives
+              <motion.span 
+                animate={{ x: [0, 5, 0] }} 
+                transition={{ repeat: Infinity, duration: 1.5 }}
               >
                 →
               </motion.span>
             </span>
-          </motion.a>
+          </MagneticButton>
+        </div>
 
-          <motion.button
-            onClick={() =>
-              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-            }
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 relative group overflow-hidden rounded-lg font-semibold"
-          >
-            <span className="absolute inset-0 border-2 border-cyan-500 rounded-lg" />
-            <span className="absolute inset-0 bg-cyan-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-            <span className="relative text-cyan-400 group-hover:text-black transition-colors duration-300">
-              View Work
-            </span>
-          </motion.button>
-        </motion.div>
-
-        {/* Mouse scroll indicator */}
-        <motion.div
+        {/* 5. INTERACTIVE TECH STACK */}
+        <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          transition={{ delay: 1.5 }}
+          className="mt-20 flex gap-6 justify-center opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
         >
-          <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center pt-2">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1.5 h-1.5 bg-cyan-400 rounded-full"
-            />
-          </div>
+          {["React", "Framer", "GLSL", "Node"].map((tech) => (
+            <span key={tech} className="text-[10px] font-black tracking-widest border-b border-white/20 pb-1 italic">
+              {tech}
+            </span>
+          ))}
         </motion.div>
-      </motion.div>
+      </div>
+
+      {/* REFINED DECORATION: SVG Path animation */}
+      <svg className="absolute bottom-0 left-0 w-full opacity-10 pointer-events-none" viewBox="0 0 1440 320">
+        <motion.path
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 2, ease: "easeInOut" }}
+          fill="none"
+          stroke="url(#grad)"
+          strokeWidth="2"
+          d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128"
+        />
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#22d3ee" />
+            <stop offset="100%" stopColor="transparent" />
+          </linearGradient>
+        </defs>
+      </svg>
     </section>
   );
 }
