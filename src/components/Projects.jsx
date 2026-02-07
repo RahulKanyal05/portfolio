@@ -9,7 +9,7 @@ const projects = [
       "Built an AI-based interview platform that analyzes resumes, generates role-specific questions, and provides real-time feedback.",
     tech: ["React", "JavaScript", "AI APIs"],
     result: "Improved interview practice efficiency for users.",
-    link: "https://github.com/RahulKanyal05",
+    link: "https://ai-interviewer-ruby.vercel.app/",
   },
   {
     title: "PDF Chat Application",
@@ -17,7 +17,7 @@ const projects = [
       "Developed a system that allows users to upload PDFs and interact with them using AI-powered summarization and Q&A.",
     tech: ["Streamlit", "LangChain", "Google AI"],
     result: "Reduced time required to extract key information from documents.",
-    link: "https://github.com/RahulKanyal05",
+    link: "https://github.com/RahulKanyal05/ChatWithMulktiplePDF",
   },
   {
     title: "Personal Portfolio",
@@ -99,7 +99,7 @@ function Projects() {
                 rel="noreferrer"
                 className="mt-auto px-6 py-2 bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500 text-cyan-400 hover:text-black font-semibold rounded-lg transition-all duration-300 text-center"
               >
-                View on GitHub →
+                View →
               </a>
             </motion.div>
           ))}
