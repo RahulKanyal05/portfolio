@@ -56,17 +56,19 @@ function Home() {
   );
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center bg-[#0a0a0a] overflow-hidden px-4">
-      
+    <section
+      id="home"
+      className="relative min-h-[100dvh] flex items-center justify-center bg-[#0a0a0a] overflow-hidden px-4">
+
       {/* 1. DYNAMIC GRID SYSTEM */}
-      <motion.div 
+      <motion.div
         style={{ background }}
         className="absolute inset-0 z-0"
       />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
       <div className="relative z-10 text-center">
-        
+
         {/* 2. CHARACTER-LEVEL ANIMATION */}
         <h1 className="text-[clamp(2.5rem,8vw,5rem)] font-bold tracking-tight text-white flex justify-center overflow-hidden">
           {name.split("").map((char, i) => (
@@ -93,39 +95,54 @@ function Home() {
           transition={{ delay: 1, duration: 1 }}
           className="mt-4 text-gray-500 font-mono text-sm md:text-base uppercase tracking-[0.3em]"
         >
-          Creative Engineer / <span className="text-cyan-500">System Architect</span>
+          Software Developer / <span className="text-cyan-500">Fullstack & AI Enthusiast</span>
         </motion.p>
 
         {/* 4. MAGNETIC ACTIONS */}
         <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-8">
           <MagneticButton className="relative group cursor-pointer">
             <div className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="relative px-8 py-3 bg-white text-black font-bold rounded-full overflow-hidden block">
-              <motion.span className="relative z-10">Start Project</motion.span>
-            </span>
+
+            <a
+              href="/resume.pdf"
+              download
+              className="relative px-8 py-3 bg-white text-black font-bold rounded-full overflow-hidden block"
+            >
+              <motion.span className="relative z-10">
+                Download Resume
+              </motion.span>
+            </a>
           </MagneticButton>
 
           <MagneticButton className="group cursor-pointer">
-            <span className="text-gray-400 group-hover:text-white transition-colors duration-300 flex items-center gap-2 font-medium">
+            <button
+              onClick={() => {
+                const el = document.getElementById("projects");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="text-gray-400 group-hover:text-white transition-colors duration-300 flex items-center gap-2 font-medium bg-transparent border-none"
+            >
               Check Archives
-              <motion.span 
-                animate={{ x: [0, 5, 0] }} 
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
                 →
               </motion.span>
-            </span>
+            </button>
           </MagneticButton>
         </div>
 
         {/* 5. INTERACTIVE TECH STACK */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
           className="mt-20 flex gap-6 justify-center opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
         >
-          {["React", "Framer", "GLSL", "Node"].map((tech) => (
+          {["React", "Node.js", "Next.js", "Python", "Tailwind"].map((tech) => (
             <span key={tech} className="text-[10px] font-black tracking-widest border-b border-white/20 pb-1 italic">
               {tech}
             </span>

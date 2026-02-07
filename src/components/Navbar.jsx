@@ -16,7 +16,7 @@ function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      
+
       // Basic logic to detect active section
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPos = window.scrollY + 100;
@@ -55,8 +55,8 @@ function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         className={`
           flex items-center gap-2 p-2 rounded-full border transition-all duration-500
-          ${scrolled 
-            ? "bg-black/40 backdrop-blur-xl border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]" 
+          ${scrolled
+            ? "bg-black/40 backdrop-blur-xl border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
             : "bg-transparent border-transparent"}
         `}
       >
@@ -83,7 +83,7 @@ function Navbar() {
               `}
             >
               <span className="relative z-10">{item.name}</span>
-              
+
               {/* SLIDING HOVER BACKGROUND */}
               <AnimatePresence>
                 {hovered === item.id && (

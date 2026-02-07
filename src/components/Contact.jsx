@@ -125,7 +125,7 @@ function Contact() {
           className="mt-32 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-600 font-mono tracking-widest uppercase"
         >
           <div>© 2026 RAHUL KANYAL — ALL RIGHTS RESERVED</div>
-          <div>BUILT WITH PRECISION & COFFEE</div>
+          <div>BUILT WITH REACT, NODE & PASSION FOR CODE</div>
           <div className="flex gap-6">
             <a href="#home" className="hover:text-white">Back to Top</a>
           </div>
